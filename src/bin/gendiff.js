@@ -1,23 +1,14 @@
 #!/usr/bin/env node
 
-import * as _ from "lodash";
-import process from "process";
+import * as _ from 'lodash';
+import process from 'process';
 
-const path = require("path");
-const fs = require("fs");
+const path = require('path');
+const fs = require('fs');
+const { program } = require('commander');
 
-const { program } = require("commander");
-
-program
-  .description("Compares two configuration files and shows a difference.")
-  .version("0.1.3")
-  .option("-f, --format [type]", "output format")
-  .action(genDiff());
-
-program.parse(process.argv);
-
-const pathTest = "exsample.json";
-const pathTest2 = "test.json";
+const pathTest = 'exsample.json';
+const pathTest2 = 'test.json';
 
 const pathT = path.resolve(process.cwd(), pathTest);
 const pathT2 = path.resolve(process.cwd(), pathTest2);
@@ -33,11 +24,10 @@ const genDiff = (obj1, obj2) => {
 
   const result = allKeys
     .map((key) => {
-      const hasObj1 = obj1.hasOwnProperty(key);
-      const hasObj2 = obj2.hasOwnProperty(key);
+      const hasObj1 = Object.prototype.hasOwnProperty.call(obj1, key);
+      const hasObj2 = Object.prototype.hasOwnProperty.call(obj2, key);
       const sameKeysAndValues = hasObj1 && hasObj2 && obj1[key] === obj2[key];
-      const sameKeysAndDifferentValues =
-        hasObj1 && hasObj2 && obj1[key] !== obj2[key];
+      const sameKeysAndDifferentValues = hasObj1 && hasObj2 && obj1[key] !== obj2[key];
 
       if (!hasObj1) {
         return `+ ${key}: ${obj2[key]}`;
@@ -51,10 +41,19 @@ const genDiff = (obj1, obj2) => {
       if (sameKeysAndDifferentValues) {
         return `+ ${key}: ${obj2[key]}\n- ${key}: ${obj1[key]}`;
       }
+      return null;
     })
-    .join("\n");
+    .join('\n');
 
   return `{\n${result}\n}`;
 };
 
 export default genDiff;
+
+program
+  .description('Compares two configuration files and shows a difference.')
+  .version('0.1.3')
+  .option('-f, --format [type]', 'output format')
+  .action(genDiff());
+
+program.parse(process.argv);
