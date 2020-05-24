@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 const path = require('path');
 const fs = require('fs');
-const { program } = require('commander');
 const _ = require('lodash');
 const process = require('process');
 
@@ -43,13 +42,4 @@ const genDiff = (file1, file2) => {
   return `{\n${result}\n}`;
 };
 
-program
-  .description('Compares two configuration files and shows a difference.')
-  .version('0.1.3')
-  .option('-f, --format [type]', 'output format')
-  .arguments('<firstFile> <secondFile>')
-  .action((firstFile, secondFile) => {
-    console.log(genDiff(firstFile, secondFile));
-  });
-
-program.parse(process.argv);
+export default genDiff;
