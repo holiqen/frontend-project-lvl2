@@ -1,25 +1,20 @@
 #!/usr/bin/env node
-
-import * as _ from 'lodash';
-import process from 'process';
-
 const path = require('path');
 const fs = require('fs');
 const { program } = require('commander');
+const _ = require('lodash');
+const process = require('process');
 
-const pathTest = 'exsample.json';
-const pathTest2 = 'test.json';
+const genDiff = (file1, file2) => {
+  const pathFile1 = path.resolve(process.cwd(), file1);
+  const pathFile2 = path.resolve(process.cwd(), file2);
 
-const pathT = path.resolve(process.cwd(), pathTest);
-const pathT2 = path.resolve(process.cwd(), pathTest2);
+  const dataFile1 = fs.readFileSync(pathFile1);
+  const dataFile2 = fs.readFileSync(pathFile2);
 
-const data = fs.readFileSync(pathT);
-const data2 = fs.readFileSync(pathT2);
+  const obj1 = JSON.parse(dataFile1);
+  const obj2 = JSON.parse(dataFile2);
 
-const test = JSON.parse(data);
-const test2 = JSON.parse(data2);
-
-const genDiff = (obj1, obj2) => {
   const allKeys = _.union(Object.keys(obj1), Object.keys(obj2));
 
   const result = allKeys
@@ -48,12 +43,13 @@ const genDiff = (obj1, obj2) => {
   return `{\n${result}\n}`;
 };
 
-export default genDiff;
-
 program
   .description('Compares two configuration files and shows a difference.')
   .version('0.1.3')
   .option('-f, --format [type]', 'output format')
-  .action(genDiff());
+  .arguments('<firstFile> <secondFile>')
+  .action((firstFile, secondFile) => {
+    console.log(genDiff(firstFile, secondFile));
+  });
 
 program.parse(process.argv);
