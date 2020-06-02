@@ -2,12 +2,6 @@ import genDiff from '../src';
 // import after from './__fixtures__/after.json';
 // import before from './__fixtures__/before.json';
 
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
 const expected = `{
   host: hexlet.io
 + timeout: 20
