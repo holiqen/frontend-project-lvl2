@@ -39,7 +39,7 @@ jobs:
         uses: paambaati/codeclimate-action@v2.6.0
 
         env:
-          HOLIQEN_HEKILL: ${{ secrets.HOLIQEN_HEKILL }}
+          CC_TEST_REPORTER_ID: ${{ secrets.HOLIQEN_HEKILL }}
         with:
           coverageCommand: make test-coverage
           debug: true
