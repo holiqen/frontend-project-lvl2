@@ -1,5 +1,5 @@
 install:
-	sudo npm link
+	npm install
 
 start:
 	npx babel-node src/bin/gendiff.js
