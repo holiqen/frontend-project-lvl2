@@ -4,15 +4,15 @@ import _ from 'lodash';
 import process from 'process';
 import parsers from './parsers';
 
-const genDiff = (file1, file2) => {
-  const pathFile1 = path.resolve(process.cwd(), file1);
-  const pathFile2 = path.resolve(process.cwd(), file2);
+const genDiff = (firstConfigurationFile, secondConfigurationFile) => {
+  const pathFile1 = path.resolve(process.cwd(), firstConfigurationFile);
+  const pathFile2 = path.resolve(process.cwd(), secondConfigurationFile);
 
   const dataFile1 = fs.readFileSync(pathFile1);
   const dataFile2 = fs.readFileSync(pathFile2);
 
-  const obj1 = parsers(dataFile1, path.extname(file1));
-  const obj2 = parsers(dataFile2, path.extname(file2));
+  const obj1 = parsers(dataFile1, path.extname(firstConfigurationFile));
+  const obj2 = parsers(dataFile2, path.extname(secondConfigurationFile));
 
   const allKeys = _.union(Object.keys(obj1), Object.keys(obj2));
 
