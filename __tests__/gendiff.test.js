@@ -5,8 +5,11 @@ import genDiff from '../src';
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
-const fullPathBefore = path.resolve(`${dirname}/__fixtures__/`, 'before.json');
-const fullPathAfter = path.resolve(`${dirname}/__fixtures__/`, 'after.json');
+const jsonBefore = path.resolve(`${dirname}/__fixtures__/`, 'before.json');
+const jsonAfter = path.resolve(`${dirname}/__fixtures__/`, 'after.json');
+
+const yamlBefore = path.resolve(`${dirname}/__fixtures__/`, 'before.yaml');
+const yamlAfter = path.resolve(`${dirname}/__fixtures__/`, 'after.yaml');
 
 const expected = `{
   host: hexlet.io
@@ -17,6 +20,10 @@ const expected = `{
 + verbose: true
 }`;
 
-test('genDiff', () => {
-  expect(genDiff(fullPathBefore, fullPathAfter)).toBe(expected);
+test('json', () => {
+  expect(genDiff(jsonBefore, jsonAfter)).toBe(expected);
+});
+
+test('yaml', () => {
+  expect(genDiff(yamlBefore, yamlAfter)).toBe(expected);
 });

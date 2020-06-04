@@ -41,7 +41,8 @@
     "eslint": "^7.0.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-import": "^2.20.2",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "js-yaml": "^3.14.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.1",
