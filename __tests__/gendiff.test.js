@@ -11,6 +11,9 @@ const jsonAfter = path.resolve(`${dirname}/__fixtures__/`, 'after.json');
 const yamlBefore = path.resolve(`${dirname}/__fixtures__/`, 'before.yaml');
 const yamlAfter = path.resolve(`${dirname}/__fixtures__/`, 'after.yaml');
 
+const iniBefore = path.resolve(`${dirname}/__fixtures__/`, 'before.ini');
+const iniAfter = path.resolve(`${dirname}/__fixtures__/`, 'after.ini');
+
 const expected = `{
   host: hexlet.io
 + timeout: 20
@@ -26,4 +29,8 @@ test('json', () => {
 
 test('yaml', () => {
   expect(genDiff(yamlBefore, yamlAfter)).toBe(expected);
+});
+
+test('ini', () => {
+  expect(genDiff(iniBefore, iniAfter)).toBe(expected);
 });
