@@ -1,19 +1,22 @@
 import _ from 'lodash';
 
+const indent = (depth) => ' '.repeat(depth);
+
+const stringify = (value, depth = 0) => {
+  if (!_.isObject(value)) {
+    return value;
+  }
+
+  const nested = _.keys(value).map(
+    (key) => `${indent(depth + 5)}${key}: ${value[key]}`,
+  );
+
+  return `{\n${nested.join('\n')}\n${indent(depth + 1)}}`;
+};
+
 const nestedFormat = (difObj) => {
-  const iter = (data, depth = 0) => {
-    const tab = ' ';
-    const indent = (level) => tab.repeat(level);
-
-    const stringify = (value, level = 0) => {
-      if (!_.isObject(value)) {
-        return value;
-      }
-      const nested = _.keys(value).map((key) => `${indent(level + 5)}${key}: ${value[key]}`);
-      return `{\n${nested.join('\n')}\n${indent(level + 1)}}`;
-    };
-
-    return data.map(({
+  const iter = (data, depth = 0) => data
+    .map(({
       type, name, value, valueAfter, valueBefore, children,
     }) => {
       switch (type) {
@@ -24,19 +27,28 @@ const nestedFormat = (difObj) => {
           return `${indent(depth)}- ${name}: ${stringify(value, depth + 1)}`;
 
         case 'changed':
-          return `${indent(depth)}+ ${name}: ${stringify(valueAfter, depth + 1)}\n${indent(depth)}- ${name}: ${stringify(valueBefore, depth + 1)}`;
+          return `${indent(depth)}+ ${name}: ${stringify(
+            valueAfter,
+            depth + 1,
+          )}\n${indent(depth)}- ${name}: ${stringify(
+            valueBefore,
+            depth + 1,
+          )}`;
 
         case 'unchanged':
           return `${indent(depth)}  ${name}: ${stringify(value, depth + 1)}`;
 
         case 'nested':
-          return `${indent(depth)}  ${name}: {\n${iter(children, depth + 4)}\n${indent(depth + 2)}}`;
+          return `${indent(depth)}  ${name}: {\n${iter(
+            children,
+            depth + 4,
+          )}\n${indent(depth + 2)}}`;
 
         default:
           return 'Error';
       }
-    }).join('\n');
-  };
+    })
+    .join('\n');
   return `{\n${iter(difObj)}\n}`;
 };
 

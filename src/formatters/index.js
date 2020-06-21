@@ -2,15 +2,15 @@ import nestedFormat from './stylish';
 import jsonFormat from './json';
 import plainFormat from './plain';
 
-const renderers = {
+const formatType = {
   nested: nestedFormat,
   json: jsonFormat,
   plain: plainFormat,
 };
 
-const formatted = (diffObj, format) => {
-  const render = renderers[format];
+const getFormat = (diffObj, format) => {
+  const render = formatType[format];
   return render(diffObj);
 };
 
-export default formatted;
+export default getFormat;
