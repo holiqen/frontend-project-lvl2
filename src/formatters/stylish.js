@@ -22,10 +22,8 @@ const nestedFormat = (difObj) => {
       switch (type) {
         case 'added':
           return `${indent(depth)}+ ${name}: ${stringify(value, depth + 1)}`;
-
         case 'deleted':
           return `${indent(depth)}- ${name}: ${stringify(value, depth + 1)}`;
-
         case 'changed':
           return `${indent(depth)}+ ${name}: ${stringify(
             valueAfter,
@@ -34,16 +32,13 @@ const nestedFormat = (difObj) => {
             valueBefore,
             depth + 1,
           )}`;
-
         case 'unchanged':
           return `${indent(depth)}  ${name}: ${stringify(value, depth + 1)}`;
-
         case 'nested':
           return `${indent(depth)}  ${name}: {\n${iter(
             children,
             depth + 4,
           )}\n${indent(depth + 2)}}`;
-
         default:
           return 'Error';
       }
