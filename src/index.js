@@ -5,43 +5,34 @@ import process from 'process';
 import getParseByExtension from './parsers';
 import getFormattedDiff from './formatters';
 
+const getAllConfigKeys = (firstConfig, secondConfig) => (
+  _.union(Object.keys(firstConfig), Object.keys(secondConfig))
+);
+
+const getConfigData = (configurationFile) => (
+  fs.readFileSync(path.resolve(process.cwd(), configurationFile))
+);
+
 const genDiff = (
   firstConfigurationFile,
   secondConfigurationFile,
   format = 'nested',
 ) => {
-  const getFirstConfigPath = path.resolve(
-    process.cwd(),
-    firstConfigurationFile,
-  );
-  const getSecondConfigPath = path.resolve(
-    process.cwd(),
-    secondConfigurationFile,
-  );
-
-  const getFirstConfigData = fs.readFileSync(getFirstConfigPath);
-  const getSecondConfigData = fs.readFileSync(getSecondConfigPath);
-
   const firstParseConfig = getParseByExtension(
-    getFirstConfigData,
+    getConfigData(firstConfigurationFile),
     path.extname(firstConfigurationFile),
   );
   const secondParseConfig = getParseByExtension(
-    getSecondConfigData,
+    getConfigData(secondConfigurationFile),
     path.extname(secondConfigurationFile),
   );
 
   function result(firstConfig, secondConfig) {
-    const allKeys = _.union(
-      Object.keys(firstConfig),
-      Object.keys(secondConfig),
-    );
-    return allKeys.map((key) => {
+    return getAllConfigKeys(firstConfig, secondConfig).map((key) => {
       const hasObj1 = key in firstConfig;
       const hasObj2 = key in secondConfig;
       const sameKeysAndDifferentValues = firstConfig[key] !== secondConfig[key];
       const bothAreObjects = _.isObject(firstConfig[key]) && _.isObject(secondConfig[key]);
-
       if (!hasObj1) {
         return { name: key, type: 'added', value: secondConfig[key] };
       }
@@ -66,7 +57,6 @@ const genDiff = (
       return { name: key, type: 'unchanged', value: firstConfig[key] };
     });
   }
-
   return getFormattedDiff(result(firstParseConfig, secondParseConfig), format);
 };
 
