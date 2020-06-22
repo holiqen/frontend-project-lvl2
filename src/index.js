@@ -2,21 +2,40 @@ import path from 'path';
 import fs from 'fs';
 import _ from 'lodash';
 import process from 'process';
-import getParse from './parsers';
-import getFormat from './formatters';
+import getParseByExtension from './parsers';
+import getFormattedDiff from './formatters';
 
-const genDiff = (firstConfigurationFile, secondConfigurationFile, format = 'nested') => {
-  const pathFile1 = path.resolve(process.cwd(), firstConfigurationFile);
-  const pathFile2 = path.resolve(process.cwd(), secondConfigurationFile);
+const genDiff = (
+  firstConfigurationFile,
+  secondConfigurationFile,
+  format = 'nested',
+) => {
+  const getFirstConfigPath = path.resolve(
+    process.cwd(),
+    firstConfigurationFile,
+  );
+  const getSecondConfigPath = path.resolve(
+    process.cwd(),
+    secondConfigurationFile,
+  );
 
-  const dataFile1 = fs.readFileSync(pathFile1);
-  const dataFile2 = fs.readFileSync(pathFile2);
+  const getFirstConfigData = fs.readFileSync(getFirstConfigPath);
+  const getSecondConfigData = fs.readFileSync(getSecondConfigPath);
 
-  const obj1 = getParse(dataFile1, path.extname(firstConfigurationFile));
-  const obj2 = getParse(dataFile2, path.extname(secondConfigurationFile));
+  const firstParseConfig = getParseByExtension(
+    getFirstConfigData,
+    path.extname(firstConfigurationFile),
+  );
+  const secondParseConfig = getParseByExtension(
+    getSecondConfigData,
+    path.extname(secondConfigurationFile),
+  );
 
   function result(firstConfig, secondConfig) {
-    const allKeys = _.union(Object.keys(firstConfig), Object.keys(secondConfig));
+    const allKeys = _.union(
+      Object.keys(firstConfig),
+      Object.keys(secondConfig),
+    );
     return allKeys.map((key) => {
       const hasObj1 = key in firstConfig;
       const hasObj2 = key in secondConfig;
@@ -30,7 +49,11 @@ const genDiff = (firstConfigurationFile, secondConfigurationFile, format = 'nest
         return { name: key, type: 'deleted', value: firstConfig[key] };
       }
       if (bothAreObjects) {
-        return { name: key, type: 'nested', children: result(firstConfig[key], secondConfig[key]) };
+        return {
+          name: key,
+          type: 'nested',
+          children: result(firstConfig[key], secondConfig[key]),
+        };
       }
       if (sameKeysAndDifferentValues) {
         return {
@@ -44,7 +67,7 @@ const genDiff = (firstConfigurationFile, secondConfigurationFile, format = 'nest
     });
   }
 
-  return getFormat(result(obj1, obj2), format);
+  return getFormattedDiff(result(firstParseConfig, secondParseConfig), format);
 };
 
 export default genDiff;

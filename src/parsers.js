@@ -1,7 +1,7 @@
 import yaml from 'js-yaml';
 import ini from 'ini';
 
-const getParse = (fileConf, fileExtension) => {
+const getParseByExtension = (fileConf, fileExtension) => {
   if (fileExtension === '.json') {
     return JSON.parse(fileConf);
   }
@@ -13,4 +13,4 @@ const getParse = (fileConf, fileExtension) => {
   return ini.parse(`${fileConf}`);
 };
 
-export default getParse;
+export default getParseByExtension;

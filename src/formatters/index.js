@@ -8,9 +8,9 @@ const formatType = {
   plain: plainFormat,
 };
 
-const getFormat = (diffObj, format) => {
+const getFormattedDiff = (diffObj, format) => {
   const render = formatType[format];
   return render(diffObj);
 };
 
-export default getFormat;
+export default getFormattedDiff;
