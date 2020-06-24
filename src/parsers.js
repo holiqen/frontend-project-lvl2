@@ -1,16 +1,17 @@
 import yaml from 'js-yaml';
 import ini from 'ini';
 
-const getParseByExtension = (fileConf, fileExtension) => {
-  if (fileExtension === '.json') {
-    return JSON.parse(fileConf);
-  }
+const extensionType = {
+  json: JSON.parse,
+  yml: yaml.safeLoad,
+  yaml: yaml.safeLoad,
+  ini: ini.parse,
+};
 
-  if (fileExtension === '.yaml' || fileExtension === '.yml') {
-    return yaml.safeLoad(fileConf);
-  }
+const getParseByExtension = (config, configExtension) => {
+  const render = extensionType[configExtension.slice(1)];
 
-  return ini.parse(`${fileConf}`);
+  return render(`${config}`);
 };
 
 export default getParseByExtension;
