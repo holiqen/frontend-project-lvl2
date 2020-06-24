@@ -3,7 +3,7 @@ import fs from 'fs';
 import process from 'process';
 import getParseByExtension from './parsers';
 import getFormattedDiff from './formatters';
-import createConfigAst from './creatAst';
+import createConfigAst from './createAst';
 
 const getConfigData = (configurationFile) => (
   fs.readFileSync(path.resolve(process.cwd(), configurationFile))
