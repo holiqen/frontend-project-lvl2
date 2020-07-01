@@ -15,11 +15,11 @@ const stringify = (value, depth = 0) => {
 };
 
 const nestedFormat = (configAst) => {
-  const iter = (branch, depth = 0) => branch
+  const iter = (tree, depth = 0) => tree
     .map(({
-      type, name, value, valueAfter, valueBefore, children,
+      name, value, ...node
     }) => {
-      switch (type) {
+      switch (node.type) {
         case 'added':
           return `${indent(depth)}+ ${name}: ${stringify(value, depth + 1)}`;
 
@@ -27,22 +27,13 @@ const nestedFormat = (configAst) => {
           return `${indent(depth)}- ${name}: ${stringify(value, depth + 1)}`;
 
         case 'changed':
-          return `${indent(depth)}+ ${name}: ${stringify(
-            valueAfter,
-            depth + 1,
-          )}\n${indent(depth)}- ${name}: ${stringify(
-            valueBefore,
-            depth + 1,
-          )}`;
+          return `${indent(depth)}+ ${name}: ${stringify(node.valueAfter, depth + 1)}\n${indent(depth)}- ${name}: ${stringify(node.valueBefore, depth + 1)}`;
 
         case 'unchanged':
           return `${indent(depth)}  ${name}: ${stringify(value, depth + 1)}`;
 
         case 'nested':
-          return `${indent(depth)}  ${name}: {\n${iter(
-            children,
-            depth + 4,
-          )}\n${indent(depth + 2)}}`;
+          return `${indent(depth)}  ${name}: {\n${iter(node.children, depth + 4)}\n${indent(depth + 2)}}`;
 
         default:
           return 'Error';
