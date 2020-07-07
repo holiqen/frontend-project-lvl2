@@ -1,17 +1,18 @@
-import _ from 'lodash';
+import isObject from 'lodash/isObject';
+import keys from 'lodash/keys';
 
-const indent = (depth) => ' '.repeat(depth);
+const indent = (depth) => '    '.repeat(depth);
 
 const stringify = (value, depth = 0) => {
-  if (!_.isObject(value)) {
+  if (!isObject(value)) {
     return value;
   }
 
-  const nested = _.keys(value).map(
-    (key) => `${indent(depth + 5)}${key}: ${value[key]}`,
+  const nested = keys(value).map(
+    (key) => `${indent(depth)}  ${key}: ${value[key]}`,
   );
 
-  return `{\n${nested.join('\n')}\n${indent(depth + 1)}}`;
+  return `{\n${nested.join('\n')}\n${indent(depth - 1)}  }`;
 };
 
 const nestedFormat = (configAst) => {
@@ -30,10 +31,10 @@ const nestedFormat = (configAst) => {
           return `${indent(depth)}+ ${name}: ${stringify(node.valueAfter, depth + 1)}\n${indent(depth)}- ${name}: ${stringify(node.valueBefore, depth + 1)}`;
 
         case 'unchanged':
-          return `${indent(depth)}  ${name}: ${stringify(value, depth + 1)}`;
+          return `${indent(depth)}  ${name}: ${stringify(value, depth)}`;
 
         case 'nested':
-          return `${indent(depth)}  ${name}: {\n${iter(node.children, depth + 4)}\n${indent(depth + 2)}}`;
+          return `${indent(depth)}  ${name}: {\n${iter(node.children, depth + 1)}\n  ${indent(depth)}}`;
 
         default:
           return 'Error';

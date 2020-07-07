@@ -1,7 +1,8 @@
-import _ from 'lodash';
+import union from 'lodash/union';
+import isObject from 'lodash/isObject';
 
 const getAllConfigKeys = (firstConfig, secondConfig) => (
-  _.union(Object.keys(firstConfig), Object.keys(secondConfig))
+  union(Object.keys(firstConfig), Object.keys(secondConfig))
 );
 
 const isKeyInConfig = (key, config) => key in config;
@@ -9,7 +10,7 @@ const isKeyInConfig = (key, config) => key in config;
 const createConfigAst = (firstConfig, secondConfig) => (
   getAllConfigKeys(firstConfig, secondConfig).map((key) => {
     const sameKeysAndDifferentValues = firstConfig[key] !== secondConfig[key];
-    const bothAreObjects = _.isObject(firstConfig[key]) && _.isObject(secondConfig[key]);
+    const bothAreObjects = isObject(firstConfig[key]) && isObject(secondConfig[key]);
 
     if (!isKeyInConfig(key, firstConfig)) {
       return { name: key, type: 'added', value: secondConfig[key] };

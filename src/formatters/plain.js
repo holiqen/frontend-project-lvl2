@@ -1,16 +1,16 @@
-import _ from 'lodash';
+import isObject from 'lodash/isObject';
 
-const stringify = (value) => (!_.isObject(value) ? value : '[complex value]');
+const stringify = (value) => (!isObject(value) ? value : '[complex value]');
 
 const plainFormat = (configAst, path) => {
-  const lines = configAst.map((branch) => {
+  const lines = configAst.map((tree) => {
     const {
-      type, name, value, valueAfter, valueBefore, children,
-    } = branch;
+      name, value, ...node
+    } = tree;
 
     const fullPath = path ? `${path}.${name}` : `${name}`;
 
-    switch (type) {
+    switch (node.type) {
       case 'added':
         return `Property '${fullPath}' was added with value: ${stringify(value)}`;
 
@@ -18,10 +18,10 @@ const plainFormat = (configAst, path) => {
         return `Property '${fullPath}' was deleted`;
 
       case 'changed':
-        return `Property '${fullPath}' was changed from '${stringify(valueBefore)}' to '${stringify(valueAfter)}'`;
+        return `Property '${fullPath}' was changed from '${stringify(node.valueBefore)}' to '${stringify(node.valueAfter)}'`;
 
       case 'nested':
-        return `${plainFormat(children, fullPath)}`;
+        return `${plainFormat(node.children, fullPath)}`;
 
       case 'unchanged':
         return null;

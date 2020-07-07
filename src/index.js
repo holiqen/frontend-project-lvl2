@@ -6,7 +6,7 @@ import getFormattedDiff from './formatters';
 import createConfigAst from './createAst';
 
 const getConfigData = (configurationFile) => (
-  fs.readFileSync(path.resolve(process.cwd(), configurationFile))
+  fs.readFileSync(path.resolve(process.cwd(), configurationFile), 'utf-8')
 );
 
 const genDiff = (

@@ -11,7 +11,7 @@ const extensionType = {
 const getParseByExtension = (config, configExtension) => {
   const render = extensionType[configExtension.slice(1)];
 
-  return render(`${config}`);
+  return render(config);
 };
 
 export default getParseByExtension;
