@@ -1,5 +1,5 @@
-import isObject from 'lodash/isObject';
-import keys from 'lodash/keys';
+import isObject from 'lodash/isObject.js';
+import keys from 'lodash/keys.js';
 
 const indent = (depth) => '    '.repeat(depth);
 

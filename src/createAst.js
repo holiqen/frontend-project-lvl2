@@ -1,5 +1,5 @@
-import union from 'lodash/union';
-import isObject from 'lodash/isObject';
+import union from 'lodash/union.js';
+import isObject from 'lodash/isObject.js';
 
 const getAllConfigKeys = (firstConfig, secondConfig) => (
   union(Object.keys(firstConfig), Object.keys(secondConfig))

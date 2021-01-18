@@ -1,6 +1,6 @@
-import nestedFormat from './stylish';
-import jsonFormat from './json';
-import plainFormat from './plain';
+import nestedFormat from './stylish.js';
+import jsonFormat from './json.js';
+import plainFormat from './plain.js';
 
 const formatType = {
   nested: nestedFormat,

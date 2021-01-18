@@ -1,9 +1,9 @@
 import path from 'path';
 import fs from 'fs';
 import process from 'process';
-import getParseByExtension from './parsers';
-import getFormattedDiff from './formatters';
-import createConfigAst from './createAst';
+import getParseByExtension from './parsers.js';
+import getFormattedDiff from './formatters/index.js';
+import createConfigAst from './createAst.js';
 
 const getConfigData = (configurationFile) => (
   fs.readFileSync(path.resolve(process.cwd(), configurationFile), 'utf-8')
