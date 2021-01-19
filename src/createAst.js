@@ -41,5 +41,4 @@ const createConfigAst = (firstConfig, secondConfig) => (
   })
 );
 
-
 export default createConfigAst;

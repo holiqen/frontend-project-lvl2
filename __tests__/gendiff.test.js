@@ -3,7 +3,6 @@ import path from 'path';
 import fs from 'fs';
 import genDiff from '../src';
 
-
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
